@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kotipakkija</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        #app {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #list-container {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Kotipakkija</h1>
+        <div>
+            <input type="text" id="itemInput" placeholder="Add a new item">
+            <button onclick="addItem()">Add</button>
+        </div>
+        <div id="list-container">
+            <ul id="itemList">
+                <!-- List items will be dynamically added here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function addItem() {
+            var input = document.getElementById("itemInput");
+            var itemList = document.getElementById("itemList");
+
+            if (input.value.trim() !== "") {
+                var li = document.createElement("li");
+                li.innerHTML = `
+                    <span>${input.value}</span>
+                    <button onclick="removeItem(this)">Remove</button>
+                `;
+                itemList.appendChild(li);
+                input.value = "";
+            }
+        }
+
+        function removeItem(button) {
+            var li = button.parentNode;
+            var itemList = document.getElementById("itemList");
+            itemList.removeChild(li);
+        }
+    </script>
+</body>
+
+</html>
