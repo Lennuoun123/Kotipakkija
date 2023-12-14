@@ -1,0 +1,75 @@
+/* styles.css */
+
+/* Reset default margin and padding */
+body,
+h1,
+h2,
+p,
+ul,
+li,
+form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-image: url('https://i.ytimg.com/vi/Xq13QeujMvA/maxresdefault.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #333;
+}
+
+
+header {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better readability */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #007bff; /* Heading color */
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+input[type="submit"],
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for better readability */
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
