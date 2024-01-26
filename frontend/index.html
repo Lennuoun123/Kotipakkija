@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kotipakkija</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Kotipakkija</h1>
+</header>
+
+<main>
+    <section id="input-form">
+        <form id="lesson-form">
+            <label for="class">Vali klass:</label>
+            <select id="class" name="class">
+                <option value="1P">1P</option>
+                <option value="1T">1T</option>
+                <option value="2P">2P</option>
+                <option value="2T">2T</option>
+                <option value="3P">3P</option>
+                <option value="3T">3T</option>
+                <option value="4P">4P</option>
+                <option value="4T">4T</option>
+                <option value="5P">5P</option>
+                <option value="5T">5T</option>
+                <option value="6A">6A</option>
+                <option value="6B">6B</option>
+                <option value="7A">7A</option>
+                <option value="7B">7B</option>
+                <option value="8A">8A</option>
+                <option value="8B">8B</option>
+                <option value="9A">9A</option>
+                <option value="9B">9B</option>
+                <option value="10K">10K</option>
+                <option value="10R">10R</option>
+                <option value="11K">11K</option>
+                <option value="11R">11R</option>
+            </select>
+            <label for="day">Vali päev:</label>
+            <select id="day" name="day">
+                <option value="Esmaspäev">Esmaspäev</option>
+                <option value="Teisipäev">Teisipäev</option>
+                <option value="Kolmapäev">Kolmapäev</option>
+                <option value="Neljapäev">Neljapäev</option>
+                <option value="Reede">Reede</option>
+            </select>
+
+            <!-- Dynamic lesson inputs will be added here -->
+            <div id="dynamic-lesson-inputs">
+                <!-- Placeholder for dynamic lesson requirement inputs -->
+            </div>
+
+            <button type="button" id="generate-list">Generate List</button>
+        </form>
+    </section>
+    <section id="timetable">
+        <h2>Tundides vajaminev ↓</h2>
+        <ul id="required-items-list">
+            <!-- Placeholder for the timetable display -->
+            <!-- This area will be populated with the timetable based on user selections -->
+        </ul>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 Kotipakkija</p>
+</footer>
+
+</body>
+</html>
