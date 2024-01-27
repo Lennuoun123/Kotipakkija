@@ -17,6 +17,7 @@ komb = [
     '11100', '11101', '11110', '11111'
 ]
 sisesta_klass = input("Sisesta klass: ")
+
 klass = [sisesta_klass]
 klass_filter = df[df['SectionID'].isin(klass)]
 unique_values_list = klass_filter['Course name'].unique().tolist()
