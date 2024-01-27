@@ -16,7 +16,7 @@ function createLessonInputs(lessons) {
         input.type = 'text';
         input.id = `input-${lesson}`;
         input.name = `input-${lesson}`;
-        input.placeholder = `Enter items for ${lesson}`;
+        input.placeholder = `Sisesta asjad: ${lesson}`;
         dynamicInputsDiv.appendChild(input);
         
         dynamicInputsDiv.appendChild(document.createElement('br'));
