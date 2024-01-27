@@ -23,6 +23,7 @@ klass_filter = df[df['SectionID'].isin(klass)]
 unique_values_list = klass_filter['Course name'].unique().tolist()
 print(unique_values_list)
 
+
 sisesta_päev = input("Sisesta päev: ").lower()
 
 if sisesta_päev == "esmaspäev":
