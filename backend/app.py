@@ -8,32 +8,33 @@ CORS(app)
 # Function to parse the xlsx file and get the timetable
 def parse_xlsx(class_code):
     # Open the workbook and select the active worksheet
-    wb = openpyxl.load_workbook('/home/jakkobk/Kotipakkija/data/3P_tunniplaan (1).xlsx')
+    wb = openpyxl.load_workbook('/home/jakkobk/Kotipakkija/backend/data/3P_tunniplaan (1).xlsx')
     ws = wb.active
 
-    #print("Worksheet Data:")
-    #for row in ws.iter_rows(values_only=True):
-    #    print(row)
+    print("Worksheet Data:")
+    for row in ws.iter_rows(values_only=True):
+        print(row)
 
     # Find the schedule for the given class code
     schedule = []
     for row in ws.iter_rows(values_only=True):
-        if row[0].startswith(class_code):
+        if row[1].startswith(class_code):
             print("Matched Class Code:", row)
             schedule.append(row)
+     
 
     return schedule
 
 # This function now also takes a dictionary of userItems where the key is the lesson name
 # and the value is a string of items the user requires for that lesson.
 def generate_list_for_day(schedule, day_index, userItems):
-    items = []
+    items = set()
     for lesson in schedule:
         if lesson[3][day_index] == '1':  # If there is a class on that day
             # Get the user's items for this lesson, if they have been provided
             lesson_items = userItems.get(lesson[0], "No items specified")
-            items.append(f"{lesson[0]}: {lesson_items}")
-    return items
+            items.add(f"{lesson[0]}: {lesson_items}")
+    return list(items)
 
 
 @app.route('/api/generateItemList', methods=['POST'])
