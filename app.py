@@ -45,7 +45,7 @@ for binary_number in komb:
 df_päev = df[df['Cycle Day'].isin(filtered_numbers)]
 df_päev_klass = df_päev[df['SectionID'].isin(klass)]
 
-print(df_päev_klass.head(50))
+#print(df_päev_klass.head(50))
 
 unique_values_set = set(df['CourseCode'])
 #print(unique_classes)
