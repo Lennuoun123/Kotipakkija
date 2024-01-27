@@ -18,6 +18,10 @@ komb = [
 ]
 sisesta_klass = input("Sisesta klass: ")
 klass = [sisesta_klass]
+klass_filter = df[df['SectionID'].isin(klass)]
+unique_values_list = klass_filter['Course name'].unique().tolist()
+print(unique_values_list)
+
 sisesta_päev = input("Sisesta päev: ").lower()
 
 if sisesta_päev == "esmaspäev":
@@ -41,14 +45,9 @@ df_päev_klass = df_päev[df['SectionID'].isin(klass)]
 
 print(df_päev_klass.head(50))
 
-klass_filter = df[df['SectionID'].isin(klass)]
-#values_list = klass_filter['Course name'].tolist()
-unique_values_list = klass_filter['Course name'].unique().tolist()
-print(unique_values_list)
-
 unique_values_set = set(df['CourseCode'])
-#unique_classes = set(unique_values_set['SectionID'])
 #print(unique_classes)
+
 # instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
