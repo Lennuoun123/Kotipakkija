@@ -8,10 +8,10 @@ function createLessonInputs(lessons) {
 
     lessons.forEach(lesson => {
         const label = document.createElement('label');
+    
+        //label.textContent = `${lesson}: `;
+        //dynamicInputsDiv.appendChild(label);
         label.htmlFor = `input-${lesson}`;
-        label.textContent = `${lesson}: `;
-        dynamicInputsDiv.appendChild(label);
-        
         const input = document.createElement('input');
         input.type = 'text';
         input.id = `input-${lesson}`;

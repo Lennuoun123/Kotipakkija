@@ -14,11 +14,11 @@
     <h1>Kotipakkija</h1>
 </header>
 
-<main>
+<main class="flex-container">
     <section id="input-form">
         <form id="lesson-form">
-            <label for="class">Vali klass:</label>
             <select id="class" name="class">
+                <option value="" disabled selected>Klass</option>
                 <option value="1P">1P</option>
                 <option value="1T">1T</option>
                 <option value="2P">2P</option>
@@ -42,8 +42,8 @@
                 <option value="11K">11K</option>
                 <option value="11R">11R</option>
             </select>
-            <label for="day">Vali päev:</label>
             <select id="day" name="day">
+                <option value="" disabled selected>Vali päev</option>
                 <option value="Esmaspäev">Esmaspäev</option>
                 <option value="Teisipäev">Teisipäev</option>
                 <option value="Kolmapäev">Kolmapäev</option>
@@ -67,12 +67,6 @@
         </ul>
     </section>
 </main>
-<div class="flex-container">
-    <div class="one"></div>
-    <div class="two"></div>
-    <div class="three"></div>
-  </div>
-
 <footer>
     <p>&copy; 2024 Kotipakkija</p>
 </footer>
