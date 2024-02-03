@@ -1,10 +1,54 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 import openpyxl
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # to avoid SQLAlchemy warning
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)  # Store hashed passwords
+
+class UserItems(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    lesson = db.Column(db.String(80), nullable=False)
+    items = db.Column(db.String(200), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('items', lazy=True))
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data['username']
+    password = data['password']
+    hashed_password = generate_password_hash(password)
+
+    new_user = User(username=username, password=hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'Registered successfully!'}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    user = User.query.filter_by(username=data['username']).first()
+
+    if user and check_password_hash(user.password, data['password']):
+        return jsonify({'message': 'Login successful!'}), 200
+
+    return jsonify({'message': 'Invalid username or password'}), 401
 
 # Function to parse the xlsx file and get the timetable
 def parse_xlsx(class_code):
@@ -48,31 +92,26 @@ def generate_list_for_day(schedule, day_index, userItems):
 @app.route('/api/generateItemList', methods=['POST'])
 def generate_item_list():
     data = request.json
+    username = data.get('username')  # Simulated user identification
     selected_day = data.get('day')
     selected_class = data.get('class')
     user_items = data.get('userItems', {})
 
+    # Simulate fetching user-specific data
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
 
+    # You would modify here to fetch user-specific items if stored differently
+    # For simplicity, using provided `user_items` directly
 
-    # Map the days to indexes
-    day_index_map = {
-        'Esmaspäev': 0,
-        'Teisipäev': 1,
-        'Kolmapäev': 2,
-        'Neljapäev': 3,
-        'Reede': 4
-    }
-
-    # Get the day index
+    day_index_map = {'Esmaspäev': 0, 'Teisipäev': 1, 'Kolmapäev': 2, 'Neljapäev': 3, 'Reede': 4}
     day_index = day_index_map[selected_day]
-
-    # Parse the xlsx data
     schedule = parse_xlsx(selected_class)
-
-    # Generate the list of items for the selected day
     item_list = generate_list_for_day(schedule, day_index, user_items)
 
     return jsonify({'items': item_list})
+
 
 @app.route('/api/getClassLessons', methods=['POST'])
 def get_class_lessons():
@@ -87,5 +126,66 @@ def get_class_lessons():
 
     return jsonify({'lessons': list(lessons)})
 
+@app.route('/api/userItems', methods=['POST'])
+def add_user_items():
+    data = request.json
+
+    print("Data:", data)
+
+    username = data.get('username')
+    lesson = data.get('lesson')
+    items = data.get('items')
+
+    print(username, lesson, items)
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    user_item = UserItems.query.filter_by(user_id=user.id, lesson=lesson).first()
+    if user_item:
+        user_item.items = items  # Update existing items
+    else:
+        new_user_item = UserItems(user_id=user.id, lesson=lesson, items=items)  # Add new item entry
+        db.session.add(new_user_item)
+
+    db.session.commit()
+    return jsonify({'message': 'Items updated successfully'}), 200
+
+@app.route('/api/getUserItems', methods=['POST', 'OPTIONS'])
+def get_user_items():
+    if request.method == 'OPTIONS':
+        return _build_cors_prelight_response()
+    
+    data = request.json
+    username = data.get('username')
+
+    # No longer filtering by class, so it's not fetched from the request
+    print("Printing data: ", data)
+    print("Printing username", username)
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    user_items = UserItems.query.filter_by(user_id=user.id).all()
+
+    # Now constructing items_dict without considering the class
+    items_dict = {item.lesson: item.items for item in user_items}
+
+    print("Printing user items: ", user_items)
+    print("Printing items_dict", items_dict)
+
+    return jsonify({'userItems': items_dict}), 200
+
+
+def _build_cors_prelight_response():
+    response = make_response()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True)
+

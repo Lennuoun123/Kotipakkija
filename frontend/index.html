@@ -57,10 +57,17 @@
             </div>
 
             <button type="button" id="generate-list">Koosta tabel</button>
+            <span>
+                <button type="button" id="save-items-button">Salvesta oma asjad</button>
+            </span>
         </form>
     </section>
     <section id="timetable">
-        <h2>Tundides vajaminev ↓</h2>
+        <h2>Tundides vajaminev ↓ 
+            <div id="user-info">
+                Kasutaja: <span id="logged-in-user"></span>
+              </div>
+        </h2>
         <ul id="required-items-list">
             <!-- Placeholder for the timetable display -->
             <!-- This area will be populated with the timetable based on user selections -->
@@ -72,4 +79,10 @@
 </footer>
 
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    updateLoggedInUserDisplay();
+    // Add any other initialization code here
+});
+</script>
 </html>
