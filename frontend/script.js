@@ -78,8 +78,7 @@ function saveUserItems() {
     console.log(username)
     lessons.forEach(lesson => {
         const itemsInput = document.getElementById(`input-${lesson}`).value; // Get the items from the input field
-        if (itemsInput) { // Check if the input field is not empty
-            debugger;// Send the data to the server
+        
             fetch('http://127.0.0.1:5000/api/userItems', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -95,7 +94,7 @@ function saveUserItems() {
                 // Here you can update the UI to show a success message
             })
             .catch(error => console.error('Error saving items:', error));
-        }
+
     });
 }
 
@@ -129,7 +128,7 @@ document.getElementById('class').addEventListener('change', function(event) {
 
 function fetchSavedItemsForClass(selectedClass) {
     const username = sessionStorage.getItem('username'); // Retrieve the username from session storage
-    console.log("Username and class being sent:", username, selectedClass);
+    console.log("Username being sent:", username);
 
     fetch('http://127.0.0.1:5000/api/getUserItems', { // This endpoint should return the saved items for the user
         method: 'POST',
@@ -137,22 +136,20 @@ function fetchSavedItemsForClass(selectedClass) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: username,
-            class: selectedClass
+            username: username
         }),
     })
     .then(response => response.json()) // Convert response to JSON
-    .then(fetchedData => { // Ensure 'data' is defined in this scope as the result of the response.json() promise
-        console.log("Fetched data:", fetchedData); // Log the fetched data
-        console.log("Fetched userItems:", fetchedData.userItems);
-        // Assuming the response data is an object where keys are lesson names and values are the items
-        Object.entries(fetchedData.userItems).forEach(([lesson, items]) => { // Use 'fetchedData' here
+    .then(data => {
+        const userItems = data.userItems;
+        for (const lesson in userItems) {
             const inputElement = document.getElementById(`input-${lesson}`);
             if (inputElement) {
-                inputElement.value = items; // Set the value of the input field to the saved items
+                inputElement.value = userItems[lesson];
             }
-        });
+        }
     })
+    
     .catch(error => {
         console.error('Error:', error);
     });
