@@ -1,17 +1,23 @@
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
+from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import openpyxl
 import os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+app.secret_key = 'B85YAMZRZOJASEJ732WYN6RYIKXZL9'
+CORS(app, supports_credentials=True, resources={r"*": {"origins": "*", "methods": ["GET", "POST"], "allow_headers": ["Content-Type", "Authorization"]}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # to avoid SQLAlchemy warning
 db = SQLAlchemy(app)
 
-class User(db.Model):
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)  # Store hashed passwords
@@ -40,15 +46,37 @@ def register():
 
     return jsonify({'message': 'Registered successfully!'}), 201
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
     user = User.query.filter_by(username=data['username']).first()
 
     if user and check_password_hash(user.password, data['password']):
+        login_user(user)
         return jsonify({'message': 'Login successful!'}), 200
 
     return jsonify({'message': 'Invalid username or password'}), 401
+
+@app.route('/logout', methods=['POST'])
+def logout():
+
+    if current_user.is_authenticated:
+        logout_user()
+        return jsonify({'message': 'You have been logged out.'}), 200
+    else:
+        # User not authenticated, but still return a successful response
+        print('No active session')
+        return jsonify({'message': 'No active session.'}), 200
+
+@app.route('/protected')
+@login_required
+def protected():
+    return 'This is a protected route.'
 
 # Function to parse the xlsx file and get the timetable
 def parse_xlsx(class_code):
@@ -126,17 +154,17 @@ def get_class_lessons():
 
     return jsonify({'lessons': list(lessons)})
 
-@app.route('/api/userItems', methods=['POST'])
+@app.route('/api/userItems', methods=['GET', 'POST'])
 def add_user_items():
     data = request.json
 
-    print("Data:", data)
+    #print("Data:", data)
 
     username = data.get('username')
     lesson = data.get('lesson')
     items = data.get('items')
 
-    print(username, lesson, items)
+    #print(username, lesson, items)
 
     user = User.query.filter_by(username=username).first()
     if not user:
@@ -161,8 +189,8 @@ def get_user_items():
     username = data.get('username')
 
     # No longer filtering by class, so it's not fetched from the request
-    print("Printing data: ", data)
-    print("Printing username", username)
+    #print("Printing data: ", data)
+    #print("Printing username", username)
 
     user = User.query.filter_by(username=username).first()
     if not user:
@@ -173,8 +201,8 @@ def get_user_items():
     # Now constructing items_dict without considering the class
     items_dict = {item.lesson: item.items for item in user_items}
 
-    print("Printing user items: ", user_items)
-    print("Printing items_dict", items_dict)
+    #print("Printing user items: ", user_items)
+    #print("Printing items_dict", items_dict)
 
     return jsonify({'userItems': items_dict}), 200
 

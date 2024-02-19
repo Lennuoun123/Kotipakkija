@@ -5,13 +5,17 @@
     <title>Kotipakkija</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
     <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <script defer src="script.js"></script>  
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </head>
 <body>
 
 <header>
     <h1>Kotipakkija</h1>
+    <div class="top-right", id="user-info">
+        Kasutaja: <span id="logged-in-user"></span>
+        <button id="logout-button">Logi Välja</button>
+      </div>
 </header>
 
 <main class="flex-container">
@@ -63,11 +67,7 @@
         </form>
     </section>
     <section id="timetable">
-        <h2>Tundides vajaminev ↓ 
-            <div id="user-info">
-                Kasutaja: <span id="logged-in-user"></span>
-              </div>
-        </h2>
+        <h2>Tundides vajaminev ↓</h2>
         <ul id="required-items-list">
             <!-- Placeholder for the timetable display -->
             <!-- This area will be populated with the timetable based on user selections -->
@@ -77,7 +77,6 @@
 <footer>
     <p>&copy; 2024 Kotipakkija</p>
 </footer>
-
 </body>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

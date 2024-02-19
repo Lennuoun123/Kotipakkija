@@ -101,7 +101,8 @@ button:hover {
 }
 
 #dynamic-lesson-inputs input[type='text'] {
-    width: calc(100% + 30px); /* Full width of the parent container */
+    width: calc(100%); /* Full width of the parent container */
+    resize: none;
     padding: 12px 15px;
     margin: 8px 0;
     display: inline-block;
@@ -185,6 +186,7 @@ header {
     color: white;
     padding: 20px;
     text-align: center;
+    position: relative;
 }
 
 main {
@@ -212,8 +214,12 @@ footer {
 }
 
 /* Utility classes */
-.gray {
-    color: #333;
+.top-right {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    padding: 5px; 
+
 }
 
 /* Flexbox layout */
