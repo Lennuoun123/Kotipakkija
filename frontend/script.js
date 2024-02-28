@@ -5,25 +5,32 @@ let lessons = [];
 function createLessonInputs(lessons) {
     console.log("Creating lesson inputs")
     const dynamicInputsDiv = document.getElementById('dynamic-lesson-inputs');
-    dynamicInputsDiv.innerHTML = ''; // Clear existing inputs
+    const fragment = document.createDocumentFragment(); // Create a DocumentFragment to hold the elements
 
     lessons.forEach(lesson => {
         const label = document.createElement('label');
-        //label.textContent = `${lesson}: `;
-        //dynamicInputsDiv.appendChild(label);
         label.htmlFor = `input-${lesson}`;
+        label.textContent = `${lesson} ⤵`;
+
         const input = document.createElement('input');
         input.type = 'text';
         input.id = `input-${lesson}`;
         input.name = `input-${lesson}`;
-        input.placeholder = `Sisesta asjad: ${lesson}`; 
-        dynamicInputsDiv.appendChild(input);
-        dynamicInputsDiv.appendChild(document.createElement('br'));
-        console.log("input.id:", input.id)
+        input.placeholder = `Sisesta asjad`;
+
+        fragment.appendChild(label);
+        fragment.appendChild(input);
+        fragment.appendChild(document.createElement('br'));
     });
+
+     
+    dynamicInputsDiv.innerHTML = ''; // Clear existing inputs once
+    dynamicInputsDiv.appendChild(fragment); // Append all at once
 }
 
+
 function fetchSavedItemsForClass(selectedClass) {
+    debugger;
     const username = sessionStorage.getItem('username'); // Retrieve the username from session storage
     console.log("Username being sent:", username);
 
@@ -93,9 +100,9 @@ function displayItemList(itemList) {
     });
 }
 
-// Event listener for the Generate List button
-document.getElementById('generate-list').addEventListener('click', function() {
-    console.log("Button pressed")
+// Event listener for the day change
+document.getElementById('day').addEventListener('change', function() {
+    console.log("Day changed")
     const selectedClass = document.getElementById('class').value;
     const selectedDay = document.getElementById('day').value;
     const username = sessionStorage.getItem('username')
@@ -141,7 +148,8 @@ function saveUserItems() {
     const username = sessionStorage.getItem('username');
     console.log(username)
     lessons.forEach(lesson => {
-        const itemsInput = document.getElementById(`input-${lesson}`).value; // Get the items from the input field
+        const itemsInput = document.getElementById(`input-${lesson}`).value // Get the items from the input field
+        const selectedClass = document.getElementById('class').value;
         
             fetch('http://127.0.0.1:5000/api/userItems', {
                 method: 'POST',
@@ -155,7 +163,7 @@ function saveUserItems() {
             .then(response => response.json())
             .then(data => {
                 console.log("Response from saving items", data); // Log the response from the server
-                // Here you can update the UI to show a success message
+                
             })
             .catch(error => console.error('Error saving items:', error));
 
@@ -163,10 +171,7 @@ function saveUserItems() {
 }
 
 document.getElementById('save-items-button').addEventListener('click', function(event) {
-    console.log('Button clicked, calling preventDefault');
-    event.preventDefault(); // Prevent the default form submission
     saveUserItems();
-    debugger;
 });
 
 function updateLoggedInUserDisplay() {
@@ -204,4 +209,17 @@ document.getElementById('logout-button').addEventListener('click', function() {
     .catch(error => {
         console.error('Error:', error);
     });
+});
+
+document.getElementById('class').addEventListener('change', function() {
+    // Check if a class has been selected
+    if(this.value) {
+        // Make the buttons visible
+        document.getElementById('twobuttons').style.display = 'block';
+        document.getElementById('day').style.display = 'flex'
+    } else {
+        // Hide the buttons if no class is selected
+        document.getElementById('twobuttons').style.display = 'none';
+        document.getElementById('day').style.display = 'none'
+    }
 });

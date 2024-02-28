@@ -9,17 +9,30 @@ body, h1, h2, p, ul, li, form {
     --border-radius: 20px;
 }
 
+#twobuttons {
+    display: none;
+  }
+
+#day {
+    display: none;
+}
+
+#class, #day {
+    margin-right: 5px; /* Adds some space between your select elements */
+}
+
 /* Base document styles */
 body {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     color: rgb(44, 44, 44);
-    background-image: url('https://99designs-blog.imgix.net/blog/wp-content/uploads/2018/12/Gradient_builder_2.jpg?auto=format&q=60&w=1815&h=1020.9375&fit=crop&crop=faces '); /* Replace with your image URL https://i.ytimg.com/vi/Xq13QeujMvA/maxresdefault.jpg*/
+    background-image: url('https://99designs-blog.imgix.net/blog/wp-content/uploads/2018/12/Gradient_builder_2.jpg?auto=format&q=60&w=1815&h=1020.9375&fit=crop&crop=faces '); /* https://i.ytimg.com/vi/Xq13QeujMvA/maxresdefault.jpg*/
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     overflow-x: hidden;
+    overscroll-behavior: none;
 }
 
 /* Typography */
@@ -83,21 +96,31 @@ select::-ms-expand {
 
 
 /* Buttons and interactive elements */
-input[type="submit"],
 button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 8px;
+    display: inline-block;
+    outline: 0;
+    border: 0;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 20px;
+    border-radius: 8px;
+    padding: 7px 12px 8px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 200ms,background 200ms;
+    background: transparent;
+    color: #179fd4;
+    box-shadow: 0 0 0 3px #179fd4 inset;
 }
 
-input[type="submit"]:hover,
-button:hover {
-    background-color: #0056b3;
+button:hover{
+    transform: translateY(-2px);
+} 
+
+#dynamic-lesson-inputs {
+    max-height: 370px; /* Adjust based on your preference */
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden; /* Keeps the horizontal scrollbar hidden */
+    margin: 5px;
 }
 
 #dynamic-lesson-inputs input[type='text'] {
@@ -225,6 +248,8 @@ footer {
 /* Flexbox layout */
 .flex-container {
     display: flex;
+    align-items: center; /* This will vertically center align the items if they have different heights */
+    justify-content: flex-start; /* This aligns items to the start of the container */
 }
 
 .flex-container #timetable {

@@ -2,9 +2,11 @@ from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 import openpyxl
 import os
+
 
 app = Flask(__name__)
 app.secret_key = 'B85YAMZRZOJASEJ732WYN6RYIKXZL9'
@@ -12,6 +14,8 @@ CORS(app, supports_credentials=True, resources={r"*": {"origins": "*", "methods"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # to avoid SQLAlchemy warning
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -29,9 +33,6 @@ class UserItems(db.Model):
     items = db.Column(db.String(200), nullable=False)
 
     user = db.relationship('User', backref=db.backref('items', lazy=True))
-
-with app.app_context():
-    db.create_all()
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -83,7 +84,7 @@ def parse_xlsx(class_code):
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(current_dir, 'data')  # Adjust the subdirectory name as necessary
-    xlsx_file = os.path.join(data_dir, 'nyc_excel.xlsx')  # Your actual file name
+    xlsx_file = os.path.join(data_dir, 'nyc_excel.xlsx')  #File name
 
     wb = openpyxl.load_workbook(xlsx_file)
     ws = wb.active
@@ -158,13 +159,13 @@ def get_class_lessons():
 def add_user_items():
     data = request.json
 
-    #print("Data:", data)
+    print("Data:", data)
 
     username = data.get('username')
     lesson = data.get('lesson')
     items = data.get('items')
 
-    #print(username, lesson, items)
+    print(username, lesson, items)
 
     user = User.query.filter_by(username=username).first()
     if not user:
@@ -176,8 +177,9 @@ def add_user_items():
     else:
         new_user_item = UserItems(user_id=user.id, lesson=lesson, items=items)  # Add new item entry
         db.session.add(new_user_item)
-
+    print("Committing to database")
     db.session.commit()
+    print("Commit successful.")
     return jsonify({'message': 'Items updated successfully'}), 200
 
 @app.route('/api/getUserItems', methods=['POST', 'OPTIONS'])
@@ -187,10 +189,6 @@ def get_user_items():
     
     data = request.json
     username = data.get('username')
-
-    # No longer filtering by class, so it's not fetched from the request
-    #print("Printing data: ", data)
-    #print("Printing username", username)
 
     user = User.query.filter_by(username=username).first()
     if not user:

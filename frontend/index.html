@@ -13,14 +13,16 @@
 <header>
     <h1>Kotipakkija</h1>
     <div class="top-right", id="user-info">
-        Kasutaja: <span id="logged-in-user"></span>
+        <!-- Kasutaja: <span id="logged-in-user"></span> -->
         <button id="logout-button">Logi Välja</button>
+        <div id="logged-in-user"></div>
       </div>
 </header>
 
 <main class="flex-container">
     <section id="input-form">
         <form id="lesson-form">
+            <div id="selectors" class="flex-container">
             <select id="class" name="class">
                 <option value="" disabled selected>Klass</option>
                 <option value="1P">1P</option>
@@ -54,21 +56,23 @@
                 <option value="Neljapäev">Neljapäev</option>
                 <option value="Reede">Reede</option>
             </select>
+            </div>
+
 
             <!-- Dynamic lesson inputs will be added here -->
-            <div id="dynamic-lesson-inputs">
+            <div id="dynamic-lesson-inputs" class="input-containter">
                 <!-- Placeholder for dynamic lesson requirement inputs -->
             </div>
 
-            <button type="button" id="generate-list">Koosta tabel</button>
-            <span>
+            
+            <div id="twobuttons">
                 <button type="button" id="save-items-button">Salvesta oma asjad</button>
-            </span>
+            </div>
         </form>
     </section>
     <section id="timetable">
         <h2>Tundides vajaminev ↓</h2>
-        <ul id="required-items-list">
+        <ul class="ul-subtle-shadow", id="required-items-list">
             <!-- Placeholder for the timetable display -->
             <!-- This area will be populated with the timetable based on user selections -->
         </ul>
