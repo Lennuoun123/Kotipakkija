@@ -3,30 +3,35 @@ let lessons = [];
 
 // Helper function to create input fields for each lessons
 function createLessonInputs(lessons) {
-    console.log("Creating lesson inputs")
+    console.log("Creating lesson inputs");
     const dynamicInputsDiv = document.getElementById('dynamic-lesson-inputs');
-    const fragment = document.createDocumentFragment(); // Create a DocumentFragment to hold the elements
+    dynamicInputsDiv.innerHTML = ''; // Clear existing inputs
 
     lessons.forEach(lesson => {
         const label = document.createElement('label');
-        label.htmlFor = `input-${lesson}`;
         label.textContent = `${lesson} ⤵`;
 
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = `input-${lesson}`;
-        input.name = `input-${lesson}`;
-        input.placeholder = `Sisesta asjad`;
+        const textarea = document.createElement('textarea');
+        textarea.id = `input-${lesson}`;
+        textarea.name = `input-${lesson}`;
+        textarea.placeholder = `Sisesta asjad`;
+        textarea.rows = 1; // Start with a single line
+        textarea.style.resize = 'none'; // Prevent manual resizing
+        textarea.style.overflow = 'hidden'; // Hide scrollbar
+        textarea.addEventListener('input', autoResize, false);
 
-        fragment.appendChild(label);
-        fragment.appendChild(input);
-        fragment.appendChild(document.createElement('br'));
+
+        dynamicInputsDiv.appendChild(label);
+        dynamicInputsDiv.appendChild(textarea);
+        dynamicInputsDiv.appendChild(document.createElement('br'));
     });
-
-     
-    dynamicInputsDiv.innerHTML = ''; // Clear existing inputs once
-    dynamicInputsDiv.appendChild(fragment); // Append all at once
 }
+
+function autoResize() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+}
+
 
 
 function fetchSavedItemsForClass(selectedClass) {
@@ -47,9 +52,10 @@ function fetchSavedItemsForClass(selectedClass) {
     .then(data => {
         const userItems = data.userItems;
         for (const lesson in userItems) {
-            const inputElement = document.getElementById(`input-${lesson}`);
-            if (inputElement) {
-                inputElement.value = userItems[lesson];
+            const textareaElement = document.getElementById(`input-${lesson}`);
+            if (textareaElement) {
+                textareaElement.value = userItems[lesson];
+                autoResize.call(textareaElement); // Call autoResize to adjust the height
             }
         }
     })
@@ -216,10 +222,12 @@ document.getElementById('class').addEventListener('change', function() {
     if(this.value) {
         // Make the buttons visible
         document.getElementById('twobuttons').style.display = 'block';
+        document.getElementById('dynamic-lesson-inputs').style.display = 'block';
         document.getElementById('day').style.display = 'flex'
     } else {
         // Hide the buttons if no class is selected
         document.getElementById('twobuttons').style.display = 'none';
+        document.getElementById('dynamic-lesson-inputs').style.display = 'none';
         document.getElementById('day').style.display = 'none'
     }
 });

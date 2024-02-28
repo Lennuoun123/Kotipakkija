@@ -9,11 +9,7 @@ body, h1, h2, p, ul, li, form {
     --border-radius: 20px;
 }
 
-#twobuttons {
-    display: none;
-  }
-
-#day {
+#day, #twobuttons, #dynamic-lesson-inputs {
     display: none;
 }
 
@@ -101,7 +97,7 @@ button {
     outline: 0;
     border: 0;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 20px;
     padding: 7px 12px 8px;
     font-size: 18px;
     font-weight: 700;
@@ -116,33 +112,45 @@ button:hover{
     transform: translateY(-2px);
 } 
 
+#save-items-button {
+    margin-top: 10px;
+}
+
+
+
 #dynamic-lesson-inputs {
     max-height: 370px; /* Adjust based on your preference */
     overflow-y: auto; /* Enables vertical scrolling */
     overflow-x: hidden; /* Keeps the horizontal scrollbar hidden */
     margin: 5px;
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 20px;
 }
 
-#dynamic-lesson-inputs input[type='text'] {
-    width: calc(100%); /* Full width of the parent container */
-    resize: none;
+#dynamic-lesson-inputs textarea {
+    width: 100%; /* Make textarea full width of its container */
     padding: 12px 15px;
     margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc; /* Light grey border */
-    border-radius: 20px; /* Rounded corners */
-    box-sizing: border-box; /* Include padding in the width calculation */
-    background-color: white; /* Match the white background */
-    font-size: 16px; /* Slightly larger font size for readability */
-    color: #333; /* Dark gray color for text */
+    display: block;
+    border: 1px solid #ccc; /* Consistent with other input styles */
+    border-radius: var(--border-radius); /* Use the variable for consistency */
+    box-sizing: border-box;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    
+    color: #333;
+    overflow-y: hidden; /* Initially hide the scrollbar */
+    resize: none; /* Prevent manual resizing */
 }
 
-#dynamic-lesson-inputs input[type='text']::placeholder {
+#dynamic-lesson-inputs textarea::placeholder {
     color: #aaa; /* Light grey color for placeholder */
 }
 
-#dynamic-lesson-inputs input[type='text']:hover,
-#dynamic-lesson-inputs input[type='text']:focus {
+#dynamic-lesson-inputs textarea:hover,
+#dynamic-lesson-inputs textarea:focus {
     border-color: #179fd4; /* Highlight color on hover/focus */
     outline: none; /* Remove default focus outline */
 }
@@ -214,7 +222,7 @@ header {
 
 main {
     max-width: 800px;
-    margin: 50px auto;
+    margin: 20px auto;
     padding: 30px;
     background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     border-radius: 20px;
@@ -252,9 +260,14 @@ footer {
     justify-content: flex-start; /* This aligns items to the start of the container */
 }
 
+
 .flex-container #timetable {
     flex: 2 1 0%;
     margin-left: 70px;
+}
+
+.flex-container #input-form {
+    width: 350px;
 }
 
 /* Media queries for responsive design */

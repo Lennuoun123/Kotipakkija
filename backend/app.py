@@ -47,11 +47,6 @@ def register():
 
     return jsonify({'message': 'Registered successfully!'}), 201
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -79,6 +74,11 @@ def logout():
 def protected():
     return 'This is a protected route.'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 # Function to parse the xlsx file and get the timetable
 def parse_xlsx(class_code):
 
@@ -89,49 +89,36 @@ def parse_xlsx(class_code):
     wb = openpyxl.load_workbook(xlsx_file)
     ws = wb.active
 
-    #print("Worksheet Data:")
-    #for row in ws.iter_rows(values_only=True):
-    #    print(row)
-
     # Find the schedule for the given class code
     schedule = []
     for row in ws.iter_rows(min_row=2, values_only=True):
 
         if str(row[4]).startswith(class_code):
-            #print("Matched Class Code:", row)
             schedule.append(row)
-     
-
     return schedule
 
 # This function now also takes a dictionary of userItems where the key is the lesson name
 # and the value is a string of items the user requires for that lesson.
-def generate_list_for_day(schedule, day_index, userItems):
+def generate_list_for_day(schedule, day_index, user_items):
     items = set()
     for lesson in schedule:
 
         if lesson[7][day_index] == '1':  # If there is a class on that day
-            course_code = lesson[5]
+            course_name = lesson[5]
             # Get the user's items for this lesson, if they have been provided
-            lesson_items = userItems.get(course_code, "No items specified")
-            items.add(f"{course_code}: {lesson_items}")
+            lesson_items = user_items.get(course_name, "No items specified")
+            items.add(f"{course_name}: {lesson_items}")        
     return list(items)
 
 
 @app.route('/api/generateItemList', methods=['POST'])
+@login_required
 def generate_item_list():
     data = request.json
-    username = data.get('username')  # Simulated user identification
     selected_day = data.get('day')
     selected_class = data.get('class')
     user_items = data.get('userItems', {})
 
-    # Simulate fetching user-specific data
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
-
-    # You would modify here to fetch user-specific items if stored differently
     # For simplicity, using provided `user_items` directly
 
     day_index_map = {'Esmaspäev': 0, 'Teisipäev': 1, 'Kolmapäev': 2, 'Neljapäev': 3, 'Reede': 4}
