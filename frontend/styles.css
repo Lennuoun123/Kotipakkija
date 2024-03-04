@@ -177,30 +177,29 @@ button:hover{
 #required-items-list {
     list-style: none; /* Remove default list styling */
     padding: 0;
-    margin: 0;
+    margin: auto; /* Center the list */
     background-color: #fff; /* Optional: set a background color */
     border-radius: 10px; /* Rounded corners for the list */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    overflow: hidden; /* Ensures the child elements' styles don't break the rounded corners */
+    overflow-y: auto; /* Scrollbar for the entire list if content overflows */
     font-size: 16px; /* Adjust font size as needed */
     color: #333; /* Darker text color for better readability */
-    max-width: 600px; /* Set a max-width for the list and center it if needed */
-    margin: auto;
+    width: 340px;
+    max-width: 340px; /* Set a max-width for the list */
+    max-height: 500px; /* Set a max-height for the list and enable scrolling */
 }
 
 #required-items-list li {
     border-bottom: 1px solid #eee; /* Add a subtle border to separate items */
     padding: 15px 20px; /* Add some padding for spacing */
     transition: background-color 0.3s ease; /* Transition for hover effect */
+    word-wrap: break-word; /* Prevent long words from overflowing */
 }
 
 #required-items-list li:last-child {
     border-bottom: none; /* Remove bottom border from the last item */
 }
 
-#required-items-list li:not(:last-child) {
-    border-bottom: 1px solid #eaeaea; /* Border between list items */
-}
 
 /* Style the title of the list for modern look */
 h2 {
@@ -227,6 +226,7 @@ main {
     background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
 section {
@@ -272,6 +272,7 @@ footer {
 
 /* Media queries for responsive design */
 @media (max-width: 768px) {
+   
     .flex-container {
         flex-direction: column;
     }

@@ -101,10 +101,10 @@ def parse_xlsx(class_code):
 # and the value is a string of items the user requires for that lesson.
 def generate_list_for_day(schedule, day_index, user_items):
     items = set()
-    for lesson in schedule:
+    for row in schedule:
 
-        if lesson[7][day_index] == '1':  # If there is a class on that day
-            course_name = lesson[5]
+        if row[7][day_index] == '1':  # If there is a class on that day
+            course_name = row[5]
             # Get the user's items for this lesson, if they have been provided
             lesson_items = user_items.get(course_name, "No items specified")
             items.add(f"{course_name}: {lesson_items}")        
@@ -112,7 +112,6 @@ def generate_list_for_day(schedule, day_index, user_items):
 
 
 @app.route('/api/generateItemList', methods=['POST'])
-@login_required
 def generate_item_list():
     data = request.json
     selected_day = data.get('day')
