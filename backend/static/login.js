@@ -3,7 +3,7 @@ document.getElementById('login-button').addEventListener('click', function() {
     const password = document.getElementById('login-password').value;
     const messageDiv = document.getElementById('login-message');
 
-    fetch('http://127.0.0.1:5000/login', {
+    fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -19,7 +19,7 @@ document.getElementById('login-button').addEventListener('click', function() {
         console.log(data);
         messageDiv.textContent = data.message;
         sessionStorage.setItem('username', username); // Optional, for UX purposes
-        window.location.href = 'index.html'; // Redirect to a protected page or dashboard
+        window.location.href = '/home'; // Redirect to a protected page or dashboard
     })
     .catch(error => {
         console.error('Error:', error);
@@ -32,7 +32,7 @@ document.getElementById('register-button').addEventListener('click', function() 
     const password = document.getElementById('register-password').value;
     const messageDiv = document.getElementById('register-message');
 
-    fetch('http://127.0.0.1:5000/register', {
+    fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })

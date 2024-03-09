@@ -39,7 +39,7 @@ function fetchSavedItemsForClass(selectedClass) {
     const username = sessionStorage.getItem('username'); // Retrieve the username from session storage
     console.log("Username being sent:", username);
 
-    fetch('http://127.0.0.1:5000/api/getUserItems', { // This endpoint should return the saved items for the user
+    fetch('/api/getUserItems', { // This endpoint should return the saved items for the user
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ document.getElementById('class').addEventListener('change', function(event) {
     debugger;
     const selectedClass = event.target.value;
 
-    fetch('http://127.0.0.1:5000/api/getClassLessons', {
+    fetch('/api/getClassLessons', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -99,8 +99,25 @@ function displayItemList(itemList) {
     console.log('Updating the item list on the page:', itemList);
 
     itemList.forEach(item => {
+        // Split the item into two parts at the colon, including the colon and space itself
+        const parts = item.split(/:(.+)/); // This regex will split at the first colon
+
         const listItem = document.createElement('li');
-        listItem.textContent = item;
+
+        // Check if the split was successful and the array has the necessary parts
+        if (parts.length > 1) {
+            // Create a <strong> element for the bold text
+            const strongElement = document.createElement('strong');
+            strongElement.textContent = parts[0] + ' →'; // Add the bold part back with the colon
+
+            // Append the strong element and the rest of the item text
+            listItem.appendChild(strongElement);
+            listItem.append(parts[1]); // Append the rest of the text to the list item
+        } else {
+            // In case there is no colon, just use the whole item
+            listItem.textContent = item;
+        }
+
         requiredItemsList.appendChild(listItem);
         console.log(item)
     });
@@ -125,7 +142,7 @@ document.getElementById('day').addEventListener('change', function() {
         userItems: userItems,
     });
 
-    fetch('http://127.0.0.1:5000/api/generateItemList', {
+    fetch('/api/generateItemList', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -157,7 +174,7 @@ function saveUserItems() {
         const itemsInput = document.getElementById(`input-${lesson}`).value // Get the items from the input field
         const selectedClass = document.getElementById('class').value;
         
-            fetch('http://127.0.0.1:5000/api/userItems', {
+            fetch('/api/userItems', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -194,7 +211,7 @@ function updateLoggedInUserDisplay() {
 
 document.getElementById('logout-button').addEventListener('click', function() {
     debugger;
-    fetch('http://127.0.0.1:5000/logout', {
+    fetch('/api/logout', {
         method: 'POST', // Use the same method defined in your Flask route
         headers: {
             'Content-Type': 'application/json'
@@ -207,7 +224,7 @@ document.getElementById('logout-button').addEventListener('click', function() {
             // Clear any client-side storage or state indicating user is logged in
             sessionStorage.removeItem('username');
             // Redirect to login page or home page
-            window.location.href = '../frontend/login.html';
+            window.location.href = '/';
         } else {
             throw new Error('Logout failed');
         }
@@ -221,12 +238,14 @@ document.getElementById('class').addEventListener('change', function() {
     // Check if a class has been selected
     if(this.value) {
         // Make the buttons visible
-        document.getElementById('twobuttons').style.display = 'block';
+        document.getElementById('twobuttons').style.visibility = 'visible';
+        document.getElementById('twobuttons').style.opacity = '1';
         document.getElementById('dynamic-lesson-inputs').style.display = 'block';
         document.getElementById('day').style.display = 'flex'
     } else {
         // Hide the buttons if no class is selected
-        document.getElementById('twobuttons').style.display = 'none';
+        document.getElementById('twobuttons').style.visibility = 'hidden';
+        document.getElementById('twobuttons').style.opacity = '0';
         document.getElementById('dynamic-lesson-inputs').style.display = 'none';
         document.getElementById('day').style.display = 'none'
     }

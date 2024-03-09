@@ -19,7 +19,7 @@ migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login_page'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +34,7 @@ class UserItems(db.Model):
 
     user = db.relationship('User', backref=db.backref('items', lazy=True))
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
     username = data['username']
@@ -47,7 +47,7 @@ def register():
 
     return jsonify({'message': 'Registered successfully!'}), 201
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
     user = User.query.filter_by(username=data['username']).first()
@@ -58,7 +58,7 @@ def login():
 
     return jsonify({'message': 'Invalid username or password'}), 401
 
-@app.route('/logout', methods=['POST'])
+@app.route('/api/logout', methods=['POST'])
 def logout():
 
     if current_user.is_authenticated:
@@ -69,14 +69,18 @@ def logout():
         print('No active session')
         return jsonify({'message': 'No active session.'}), 200
 
-@app.route('/protected')
-@login_required
-def protected():
-    return 'This is a protected route.'
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.route('/')
+def login_page():
+    return app.send_static_file('login.html')
+
+@app.route('/home')
+def index():
+    print('Called')
+    return app.send_static_file('index.html')
 
 
 # Function to parse the xlsx file and get the timetable
@@ -199,5 +203,5 @@ def _build_cors_prelight_response():
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
 
