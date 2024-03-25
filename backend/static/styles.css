@@ -17,14 +17,15 @@ strong {
     --border-radius: 20px;
 }
 
-#day, #dynamic-lesson-inputs {
-    display: none;
+#twobuttons, #dynamic-lesson-inputs, #day {
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0s, opacity 0.5s linear;
 }
 
-#twobuttons {
-    visibility: hidden; /* Initially hidden from view, but still takes up space */
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear; /* Smooth transition for opacity */
+#dynamic-lesson-inputs.show, #twobuttons.show, #day.show {
+    opacity: 1;
+    visibility: visible;
 }
 
 #class, #day {
@@ -37,7 +38,8 @@ body {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     color: rgb(44, 44, 44);
-    background-image: url('https://user-images.githubusercontent.com/2388823/107261098-bf287080-69f3-11eb-829c-d8884e26b758.png '); /* https://i.ytimg.com/vi/Xq13QeujMvA/maxresdefault.jpg*/
+    background-image: url('https://user-images.githubusercontent.com/2388823/107261098-bf287080-69f3-11eb-829c-d8884e26b758.png ');
+    background-color: #240a40;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -290,7 +292,7 @@ footer {
     }
 
     .flex-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 
     .flex-container #timetable {

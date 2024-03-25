@@ -18,7 +18,6 @@ document.getElementById('login-button').addEventListener('click', function() {
     .then(data => {
         console.log(data);
         messageDiv.textContent = data.message;
-        sessionStorage.setItem('username', username); // Optional, for UX purposes
         window.location.href = '/home'; // Redirect to a protected page or dashboard
     })
     .catch(error => {

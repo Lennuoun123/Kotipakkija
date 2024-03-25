@@ -35,18 +35,16 @@ function autoResize() {
 
 
 function fetchSavedItemsForClass(selectedClass) {
-    debugger;
     const username = sessionStorage.getItem('username'); // Retrieve the username from session storage
     console.log("Username being sent:", username);
 
     fetch('/api/getUserItems', { // This endpoint should return the saved items for the user
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            username: username
-        }),
+        body: JSON.stringify({})
     })
     .then(response => response.json()) // Convert response to JSON
     .then(data => {
@@ -58,21 +56,34 @@ function fetchSavedItemsForClass(selectedClass) {
                 autoResize.call(textareaElement); // Call autoResize to adjust the height
             }
         }
+        // Ensure setDayBasedOnTime is called after all textareas are updated
+        const daySelect = document.getElementById('day');
+        if (daySelect.value === "") {
+            setDayBasedOnTime();
+        }
+        else {
+            daySelect.dispatchEvent(new Event('change'));
+        }
     })
-    
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
+
 // Event listener for when the class is changed
 document.getElementById('class').addEventListener('change', function(event) {
+
     console.log("Class changed")
     debugger;
     const selectedClass = event.target.value;
 
+    // Save the selected class to localStorage
+    localStorage.setItem('selectedClass', selectedClass);
+
     fetch('/api/getClassLessons', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -88,9 +99,24 @@ document.getElementById('class').addEventListener('change', function(event) {
     .catch(error => {
         console.error('Error fetching class lessons:', error);
     });
-
-    fetchSavedItemsForClass(selectedClass);
 });
+
+function selectSavedClass() {
+    // Check if there's a saved class in localStorage
+    const savedClass = localStorage.getItem('selectedClass');
+    if (savedClass) {
+        const classSelectElement = document.getElementById('class');
+        classSelectElement.value = savedClass;
+
+        // Trigger the change event if you need to load related data based on the class
+        classSelectElement.dispatchEvent(new Event('change'));
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    selectSavedClass();
+});
+
 
 // Helper function to display the list of items required for the lessons
 function displayItemList(itemList) {
@@ -164,21 +190,43 @@ document.getElementById('day').addEventListener('change', function() {
     });
 });
 
+function setDayBasedOnTime() {
+    const daySelect = document.getElementById('day');
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    let dayIndex = currentDate.getDay();
 
+    // Adjusting the index based on your specified hours
+    if (currentHour < 3 || currentHour >= 15) {
+        dayIndex = (dayIndex + 1) % 7; // Adjust for next day
+    }
+
+    const daysMap = ["Pühapäev", "Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev"];
+    // Ensure the daysMap order matches your <select> options
+    const dayValue = daysMap[dayIndex];
+
+    // Update the day select's value
+    // Find the <option> element that matches the calculated day and set it as selected
+    Array.from(daySelect.options).forEach(option => {
+        if(option.text === dayValue) {
+            daySelect.value = option.value;
+        }
+    });
+
+    // Optionally, trigger any change event listeners attached to the day select
+    daySelect.dispatchEvent(new Event('change'));
+}
 
 function saveUserItems() {
-    console.log("Function saveUserItems.")
-    const username = sessionStorage.getItem('username');
-    console.log(username)
     lessons.forEach(lesson => {
         const itemsInput = document.getElementById(`input-${lesson}`).value // Get the items from the input field
         const selectedClass = document.getElementById('class').value;
         
             fetch('/api/userItems', {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username: username,
                     lesson: lesson,
                     items: itemsInput
                 })
@@ -198,19 +246,28 @@ document.getElementById('save-items-button').addEventListener('click', function(
 });
 
 function updateLoggedInUserDisplay() {
-    const loggedInUser = sessionStorage.getItem('username');
-    const loggedInUserElement = document.getElementById('logged-in-user');
-
-    if (loggedInUser) {
-        loggedInUserElement.textContent = loggedInUser;
-    } else {
-        loggedInUserElement.textContent = 'Pole sisse logitud';
-    }
-    console.log(sessionStorage.getItem('username'))
+    fetch('/api/current_user', {
+        method: 'GET',
+        credentials: 'include', // Important for sessions to work
+    })
+    .then(response => response.json())
+    .then(data => {
+        const loggedInUserElement = document.getElementById('logged-in-user');
+        if (data.username) {
+            loggedInUserElement.textContent = data.username;
+            console.log(data.username);
+        } else {
+            loggedInUserElement.textContent = 'Pole sisse logitud';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('logged-in-user').textContent = 'Pole sisse logitud';
+    });
 }
 
+
 document.getElementById('logout-button').addEventListener('click', function() {
-    debugger;
     fetch('/api/logout', {
         method: 'POST', // Use the same method defined in your Flask route
         headers: {
@@ -223,6 +280,7 @@ document.getElementById('logout-button').addEventListener('click', function() {
             console.log('Logout successful');
             // Clear any client-side storage or state indicating user is logged in
             sessionStorage.removeItem('username');
+            localStorage.removeItem('selectedClass');
             // Redirect to login page or home page
             window.location.href = '/';
         } else {
@@ -236,17 +294,15 @@ document.getElementById('logout-button').addEventListener('click', function() {
 
 document.getElementById('class').addEventListener('change', function() {
     // Check if a class has been selected
-    if(this.value) {
-        // Make the buttons visible
-        document.getElementById('twobuttons').style.visibility = 'visible';
-        document.getElementById('twobuttons').style.opacity = '1';
-        document.getElementById('dynamic-lesson-inputs').style.display = 'block';
-        document.getElementById('day').style.display = 'flex'
+    if (this.value) {
+        // Make the buttons and other elements visible
+        document.getElementById('twobuttons').classList.add('show');
+        document.getElementById('dynamic-lesson-inputs').classList.add('show');
+        document.getElementById('day').classList.add('show');
     } else {
-        // Hide the buttons if no class is selected
-        document.getElementById('twobuttons').style.visibility = 'hidden';
-        document.getElementById('twobuttons').style.opacity = '0';
-        document.getElementById('dynamic-lesson-inputs').style.display = 'none';
-        document.getElementById('day').style.display = 'none'
+        // Hide the buttons and other elements if no class is selected
+        document.getElementById('twobuttons').classList.remove('show');
+        document.getElementById('dynamic-lesson-inputs').classList.remove('show');
+        document.getElementById('day').classList.remove('show');
     }
 });
