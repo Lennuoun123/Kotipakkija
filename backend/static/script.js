@@ -35,8 +35,6 @@ function autoResize() {
 
 
 function fetchSavedItemsForClass(selectedClass) {
-    const username = sessionStorage.getItem('username'); // Retrieve the username from session storage
-    console.log("Username being sent:", username);
 
     fetch('/api/getUserItems', { // This endpoint should return the saved items for the user
         method: 'POST',
@@ -154,7 +152,6 @@ document.getElementById('day').addEventListener('change', function() {
     console.log("Day changed")
     const selectedClass = document.getElementById('class').value;
     const selectedDay = document.getElementById('day').value;
-    const username = sessionStorage.getItem('username')
 
     let userItems = {};
     lessons.forEach(lesson => {
@@ -174,7 +171,6 @@ document.getElementById('day').addEventListener('change', function() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username,
             day: selectedDay,
             class: selectedClass,
             userItems: userItems,
@@ -196,26 +192,37 @@ function setDayBasedOnTime() {
     const currentHour = currentDate.getHours();
     let dayIndex = currentDate.getDay();
 
-    // Adjusting the index based on your specified hours
-    if (currentHour < 3 || currentHour >= 15) {
-        dayIndex = (dayIndex + 1) % 7; // Adjust for next day
+    // Mapping of day indexes to day names, considering only weekdays
+    const daysMap = ["Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede"];
+
+    if (dayIndex === 0 || dayIndex === 6) {
+        // Weekend handling: Set index to point to Monday
+        dayIndex = 1; 
+    } else {
+        // For weekdays, adjust based on time
+        if (currentHour < 3 || currentHour >= 15) {
+            // Increment day, considering Sunday to Monday jump
+            dayIndex = (dayIndex % 5) + 1;
+        }
+        // Adjust dayIndex to map correctly to daysMap array
+        dayIndex -= 1;
     }
 
-    const daysMap = ["Pühapäev", "Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev"];
-    // Ensure the daysMap order matches your <select> options
-    const dayValue = daysMap[dayIndex];
+    // Ensures the index falls within the daysMap array bounds after all adjustments
+    dayIndex = Math.min(dayIndex, daysMap.length - 1);
 
-    // Update the day select's value
-    // Find the <option> element that matches the calculated day and set it as selected
+    let dayValue = daysMap[dayIndex];
     Array.from(daySelect.options).forEach(option => {
         if(option.text === dayValue) {
             daySelect.value = option.value;
         }
     });
 
-    // Optionally, trigger any change event listeners attached to the day select
+    // Trigger change event listeners attached to the daySelect element
     daySelect.dispatchEvent(new Event('change'));
 }
+
+
 
 function saveUserItems() {
     lessons.forEach(lesson => {
