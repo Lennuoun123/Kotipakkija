@@ -38,7 +38,7 @@ body {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     color: rgb(44, 44, 44);
-    background-image: url('https://user-images.githubusercontent.com/2388823/107261098-bf287080-69f3-11eb-829c-d8884e26b758.png ');
+    background-image: url('/static/gradientdark.png');
     background-color: #240a40;
     background-size: cover;
     background-position: center;

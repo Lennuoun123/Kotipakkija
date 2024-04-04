@@ -6,7 +6,7 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('https://user-images.githubusercontent.com/2388823/107261098-bf287080-69f3-11eb-829c-d8884e26b758.png');
+    background-image: url('/static/gradientdark.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
