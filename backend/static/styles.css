@@ -139,6 +139,8 @@ button:hover{
     border-radius: 20px;
 }
 
+
+
 #dynamic-lesson-inputs textarea {
     width: 100%; /* Make textarea full width of its container */
     padding: 12px 15px;
@@ -230,7 +232,7 @@ main {
     max-width: 800px;
     margin: 20px auto;
     padding: 30px;
-    background-color: rgba(108, 99, 171, 0.6); /* Semi-transparent background */
+    background-color: rgba(108, 99, 171, 0.6);
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: auto;
@@ -276,6 +278,33 @@ footer {
 .flex-container #input-form {
     width: 350px;
 }
+
+.alert {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    max-height: fit-content;
+    padding: 20px;
+    background-color: rgba(108, 99, 171, 0.6);
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+  }
+  
+  .alert.hidden {
+    visibility: hidden;
+    opacity: 0;
+    top: 10px;
+  }
+  
+  .alert.show {
+    visibility: visible;
+    opacity: 1;
+    top: 20px;
+  }
 
 @media (max-width: 768px) {
    

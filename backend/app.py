@@ -135,8 +135,6 @@ def generate_item_list():
     selected_class = data.get('class')
     user_items = data.get('userItems', {})
 
-    # For simplicity, using provided `user_items` directly
-
     day_index_map = {'Esmaspäev': 0, 'Teisipäev': 1, 'Kolmapäev': 2, 'Neljapäev': 3, 'Reede': 4}
     day_index = day_index_map[selected_day]
     schedule = parse_xlsx(selected_class)

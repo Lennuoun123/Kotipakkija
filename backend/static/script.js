@@ -250,6 +250,7 @@ function saveUserItems() {
 
 document.getElementById('save-items-button').addEventListener('click', function(event) {
     saveUserItems();
+    showAlert()
 });
 
 function updateLoggedInUserDisplay() {
@@ -313,3 +314,19 @@ document.getElementById('class').addEventListener('change', function() {
         document.getElementById('day').classList.remove('show');
     }
 });
+
+function showAlert() {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.classList.remove('hidden'); // Make sure the element is visible before starting the animation
+    alertBox.classList.add('show'); // Start showing the alert
+    
+    // Wait for some time before starting to hide the alert
+    setTimeout(() => {
+      alertBox.classList.remove('show');
+      // Wait for the opacity transition to finish before setting it to hidden
+      setTimeout(() => {
+        alertBox.classList.add('hidden');
+      }, 500); // This should match the duration of the opacity transition
+    }, 2500); // Display time before fade out starts
+  }
+  
