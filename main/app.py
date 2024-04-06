@@ -92,7 +92,6 @@ def login_page():
 @app.route('/home')
 @login_required
 def index():
-    print('Called')
     return app.send_static_file('index.html')
 
 

@@ -72,8 +72,6 @@ function fetchSavedItemsForClass(selectedClass) {
 // Event listener for when the class is changed
 document.getElementById('class').addEventListener('change', function(event) {
 
-    console.log("Class changed")
-    debugger;
     const selectedClass = event.target.value;
 
     // Save the selected class to localStorage
@@ -187,29 +185,23 @@ document.getElementById('day').addEventListener('change', function() {
 });
 
 function setDayBasedOnTime() {
+    debugger;
     const daySelect = document.getElementById('day');
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
-    let dayIndex = currentDate.getDay();
+    let dayIndex = currentDate.getDate();
 
     // Mapping of day indexes to day names, considering only weekdays
     const daysMap = ["Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede"];
 
     if (dayIndex === 0 || dayIndex === 6) {
-        // Weekend handling: Set index to point to Monday
-        dayIndex = 1; 
+        dayIndex = 0;
     } else {
-        // For weekdays, adjust based on time
         if (currentHour < 3 || currentHour >= 15) {
-            // Increment day, considering Sunday to Monday jump
             dayIndex = (dayIndex % 5) + 1;
         }
-        // Adjust dayIndex to map correctly to daysMap array
-        dayIndex -= 1;
+        dayIndex--;
     }
-
-    // Ensures the index falls within the daysMap array bounds after all adjustments
-    dayIndex = Math.min(dayIndex, daysMap.length - 1);
 
     let dayValue = daysMap[dayIndex];
     Array.from(daySelect.options).forEach(option => {
