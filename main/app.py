@@ -115,17 +115,29 @@ def parse_xlsx(class_code):
 
 # This function now also takes a dictionary of userItems where the key is the lesson name
 # and the value is a string of items the user requires for that lesson.
-def generate_list_for_day(schedule, day_index, user_items):
-    items = set()
-    for row in schedule:
 
+
+def generate_list_for_day(schedule, day_index, user_items):
+    items_dict = {}  # Dictionary to store items for each course name
+    course_order = {}  # Dictionary to store the order of course names encountered
+    for row in schedule:
         if row[7][day_index] == '1':  # If there is a class on that day
             course_name = row[5]
-            # Get the user's items for this lesson, if they have been provided
-            lesson_items = user_items.get(course_name, "No items specified")
-            items.add(f"{course_name}: {lesson_items}")        
-    return list(items)
+            if course_name not in items_dict:  # If course name is encountered for the first time
+                lesson_items = user_items.get(course_name, "No items specified")
+                period_id = row[6]  # Extract PeriodID
+                items_dict[course_name] = f"{course_name}: {lesson_items}"  # Store course name and items
+                course_order[course_name] = len(course_order)  # Store the order of encounter for each course
 
+    # Sort by PeriodID and then by the order of encounter for course names
+    sorted_items = [
+        item[1] for item in sorted(
+            items_dict.items(),
+            key=lambda x: (int(x[0]) if x[0].isdigit() else float('inf'), course_order.get(x[0], float('inf')))
+        )
+    ]
+
+    return sorted_items
 
 @app.route('/api/generateItemList', methods=['POST'])
 def generate_item_list():
