@@ -10,7 +10,8 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'B85YAMZRZOJASEJ732WYN6RYIKXZL9'
-CORS(app, supports_credentials=True, resources={r"*": {"origins": "*", "methods": ["GET", "POST"], "allow_headers": ["Content-Type", "Authorization"]}})
+CORS(app, supports_credentials=True)
+basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yourdatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # to avoid SQLAlchemy warning
 db = SQLAlchemy(app)
@@ -115,7 +116,6 @@ def parse_xlsx(class_code):
 
 # This function now also takes a dictionary of userItems where the key is the lesson name
 # and the value is a string of items the user requires for that lesson.
-
 
 def generate_list_for_day(schedule, day_index, user_items):
     items_dict = {}  # Dictionary to store items for each course name
