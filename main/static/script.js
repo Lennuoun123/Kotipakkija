@@ -130,7 +130,7 @@ function displayItemList(itemList) {
         if (parts.length > 1) {
             // Create a <strong> element for the bold text
             const strongElement = document.createElement('strong');
-            strongElement.textContent = parts[0] + ' →'; // Add the bold part back with the colon
+            strongElement.textContent = parts[0] + ' →'; // Add the bold part back with the arrow symbol
 
             // Append the strong element and the rest of the item text
             listItem.appendChild(strongElement);
@@ -189,30 +189,29 @@ function setDayBasedOnTime() {
     const daySelect = document.getElementById('day');
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
-    let dayIndex = currentDate.getDate();
+    let dayIndex = currentDate.getDay();
 
-    // Mapping of day indexes to day names, considering only weekdays
     const daysMap = ["Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede"];
 
     if (dayIndex === 0 || dayIndex === 6) {
-        dayIndex = 0;
+        dayIndex = 0; 
     } else {
-        if (currentHour < 3 || currentHour >= 15) {
-            dayIndex = (dayIndex % 5) + 1;
-        }
-        dayIndex--;
+        dayIndex -= 1; // Adjust index because daysMap starts from Monday (0 index)
+        if (currentHour >= 15) {
+            dayIndex = (dayIndex + 1) % 5; 
+        } 
     }
 
     let dayValue = daysMap[dayIndex];
     Array.from(daySelect.options).forEach(option => {
-        if(option.text === dayValue) {
-            daySelect.value = option.value;
+        if (option.text === dayValue) {
+            daySelect.value = option.value; // Set the select element to the calculated day
         }
     });
-
-    // Trigger change event listeners attached to the daySelect element
     daySelect.dispatchEvent(new Event('change'));
 }
+
+
 
 
 
@@ -321,4 +320,3 @@ function showAlert() {
       }, 500); // This should match the duration of the opacity transition
     }, 2500); // Display time before fade out starts
   }
-  
