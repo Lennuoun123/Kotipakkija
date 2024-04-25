@@ -1,0 +1,67 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #a3b1d7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/static/gradientdark.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.container {
+    background-color: rgba(108, 99, 171, 0.6);
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    min-width: 250px;
+    max-width: 250px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #a3b1d7;
+}
+
+input[type="text"], input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: #02021F;
+    color: #c9cfe2;
+    display: block;
+}
+
+button {
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 7px 12px 8px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 200ms,background 200ms;
+    background: transparent;
+    color: #a3b1d7;
+    box-shadow: 0 0 0 3px #8079ad inset; 
+}
+
+button:hover{
+    transform: translateY(-2px);
+    background-color: #5a5273;
+} 
+
+.message {
+    text-align: center;
+    margin-top: 10px;
+    color: #a3b1d7;
+}

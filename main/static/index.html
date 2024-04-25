@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kotipakkija</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="/static/2version.ico">
+    <script defer src="/static/script.js"></script>  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-image: url('/static/gradientdark.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            overscroll-behavior: none;
+        }
+        </style>
+</head>
+<body>
+
+<header>
+    <h1>Kotipakkija</h1>
+    <div class="top-right", id="user-info">
+        <!-- Kasutaja: <span id="logged-in-user"></span> -->
+        <button id="logout-button">Logi Välja</button>
+        <div id="logged-in-user"></div>
+      </div>
+      <div id="alertBox" class="alert hidden">Asjad Salvestatud!</div>
+</header>
+
+<main class="flex-container">
+    <section id="input-form">
+        <form id="lesson-form">
+            <div id="selectors" class="flex-container">
+            <select id="class" name="class">
+                <option value="" disabled selected>Klass</option>
+                <option value="1P">1P</option>
+                <option value="1T">1T</option>
+                <option value="2P">2P</option>
+                <option value="2T">2T</option>
+                <option value="3P">3P</option>
+                <option value="3T">3T</option>
+                <option value="4P">4P</option>
+                <option value="4T">4T</option>
+                <option value="5P">5P</option>
+                <option value="5T">5T</option>
+                <option value="6A">6A</option>
+                <option value="6B">6B</option>
+                <option value="7A">7A</option>
+                <option value="7B">7B</option>
+                <option value="8A">8A</option>
+                <option value="8B">8B</option>
+                <option value="9A">9A</option>
+                <option value="9B">9B</option>
+                <option value="10 K">10K</option>
+                <option value="10 R">10R</option>
+                <option value="11K">11K</option>
+                <option value="11R">11R</option>
+            </select>
+            <select id="day" name="day">
+                <option value="" disabled selected>Vali päev</option>
+                <option value="Esmaspäev">Esmaspäev</option>
+                <option value="Teisipäev">Teisipäev</option>
+                <option value="Kolmapäev">Kolmapäev</option>
+                <option value="Neljapäev">Neljapäev</option>
+                <option value="Reede">Reede</option>
+            </select>
+            </div>
+
+
+            <!-- Dynamic lesson inputs will be added here -->
+            <div id="dynamic-lesson-inputs" class="input-containter">
+                <!-- Placeholder for dynamic lesson requirement inputs -->
+            </div>
+
+            
+            <div id="twobuttons">
+                <button type="button" id="save-items-button">Salvesta oma asjad</button>
+            </div>
+        </form>
+    </section>
+    <section id="timetable">
+        <h2>Tundides vajaminev ⤵</h2>
+        <ul class="ul-subtle-shadow", id="required-items-list">
+            <!-- Placeholder for the timetable display -->
+            <!-- This area will be populated with the timetable based on user selections -->
+        </ul>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2024 Kotipakkija</p>
+</footer>
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    updateLoggedInUserDisplay();
+    // Add any other initialization code here
+});
+</script>
+</html>

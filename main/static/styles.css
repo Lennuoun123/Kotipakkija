@@ -1,0 +1,354 @@
+/* Reset default styles to ensure consistency across browsers */
+body, h1, h2, p, ul, li, form {
+    margin: 0;
+    padding: 0;
+}
+
+strong {
+    color:#179fd4;
+}
+
+#logged-in-user {
+    color: #a3b1d7;
+}
+
+/* Define a base border-radius for reuse */
+:root {
+    --border-radius: 20px;
+}
+
+#twobuttons, #dynamic-lesson-inputs, #day {
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+#dynamic-lesson-inputs.show, #twobuttons.show, #day.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#class, #day {
+    margin-right: 5px; /* Adds some space between your select elements */
+}
+
+/* Base document styles */
+body {
+    margin-top: 140px;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: rgb(44, 44, 44);
+    background-image: url('/static/gradientdark.png');
+    background-color: #240a40;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+}
+
+/* Typography */
+h1 {
+    margin-bottom: 20px;
+    color: #a3b1d7;
+    font-size: 2em;
+}
+
+/* Form elements */
+label {
+    margin: 0px;
+    color: #a3b1d7;
+}
+
+/* Styling for the dropdowns to match the design of text inputs */
+select {
+    padding: 10px 15px;
+    padding-right: 40px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 20px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    background-color: rgba(98, 87, 168, 0.6); /* Match the white background */
+    font-size: 16px; /* Slightly larger font size for readability */
+    color: #c9cfe2; /* Dark gray color for text */
+    appearance: none; /* Remove default system appearance */
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%; /* Position the arrow to the right */
+    cursor: pointer;
+}
+
+select:focus {
+    box-shadow: 0 0 0 2px rgba(194, 196, 214, 0.5); /* Subtle outer glow */
+    outline: none; /* Remove default focus outline */
+}
+
+/* Since actual placeholder text isn't feasible, style the first option to look like a placeholder */
+select option {
+    color: #333;
+}
+
+select option:first-child {
+    color: #aaa; /* Light grey color to mimic placeholder */
+}
+
+
+select::-ms-expand {
+    display: none; /* Remove default arrow in IE Edge */
+}
+
+
+/* Buttons and interactive elements */
+button {
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 7px 12px 8px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 200ms,background 200ms;
+    background: transparent;
+    color: #a3b1d7;
+    box-shadow: 0 0 0 3px #8079ad inset; 
+}
+
+button:hover{
+    transform: translateY(-2px);
+    background-color: #5a5273;
+} 
+
+#save-items-button {
+    margin-top: 10px;
+}
+
+
+
+#dynamic-lesson-inputs {
+    max-height: 370px; /* Adjust based on your preference */
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden; /* Keeps the horizontal scrollbar hidden */
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 20px;
+}
+
+
+
+#dynamic-lesson-inputs textarea {
+    width: 100%; /* Make textarea full width of its container */
+    padding: 12px 15px;
+    margin: 8px 0;
+    display: block;
+    border: 1px solid #ccc; /* Consistent with other input styles */
+    border-radius: var(--border-radius); /* Use the variable for consistency */
+    box-sizing: border-box;
+    background-color: #02021F;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    
+    color: #c9cfe2;
+    overflow-y: hidden; /* Initially hide the scrollbar */
+    resize: none; /* Prevent manual resizing */
+}
+
+#dynamic-lesson-inputs textarea::placeholder {
+    color: #514e5a; /* Light grey color for placeholder */
+}
+
+#dynamic-lesson-inputs button {
+    width: auto; /* Auto-width based on content */
+    padding: 10px 20px;
+    border-radius: 20px; /* Rounded corners */
+    border: none;
+    background-color: #179fd4; /* Use the same blue as the heading */
+    color: white;
+    text-transform: uppercase; /* Stylistic choice: uppercase text */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s; /* Smooth transition for hover effect */
+}
+
+#dynamic-lesson-inputs button:hover {
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Apply a modern look to the list */
+#required-items-list {
+    list-style: none; /* Remove default list styling */
+    padding: 0;
+    margin: auto; /* Center the list */
+    background-color: #02021F; 
+    border-radius: var(--border-radius); /* Rounded corners for the list */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow-y: auto; /* Scrollbar for the entire list if content overflows */
+    font-size: 16px; /* Adjust font size as needed */
+    color: #c9cfe2; /* Darker text color for better readability */
+    width: 340px;
+    max-width: 340px; /* Set a max-width for the list */
+    max-height: 500px; /* Set a max-height for the list and enable scrolling */
+}
+
+#required-items-list li {
+    border-bottom: 1px solid #eee; /* Add a subtle border to separate items */
+    padding: 15px 20px; /* Add some padding for spacing */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+    word-wrap: break-word; /* Prevent long words from overflowing */
+}
+
+#required-items-list li:last-child {
+    border-bottom: none; /* Remove bottom border from the last item */
+}
+
+
+/* Style the title of the list for modern look */
+h2 {
+    color: #a3b1d7; /* Use a color that matches your theme */
+    font-size: 24px; /* Larger font size for the title */
+    margin-bottom: 20px; /* Space between title and list */
+    text-align: center; /* Center align the title */
+}
+
+
+/* Page sections and layout */
+header {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: rgba(108, 99, 171, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Utility classes */
+.top-right {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+    padding: 5px; 
+
+}
+
+/* Flexbox layout */
+.flex-container {
+    display: flex;
+    align-items: center; /* This will vertically center align the items if they have different heights */
+    justify-content: flex-start; /* This aligns items to the start of the container */
+}
+
+
+.flex-container #timetable {
+    flex: 2 1 0%;
+    margin-left: 70px;
+}
+
+.flex-container #input-form {
+    width: 350px;
+}
+
+.alert {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    max-height: fit-content;
+    padding: 20px;
+    background-color: rgba(108, 99, 171, 0.6);
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+  }
+  
+  .alert.hidden {
+    visibility: hidden;
+    opacity: 0;
+    top: 10px;
+  }
+  
+  .alert.show {
+    visibility: visible;
+    opacity: 1;
+    top: 20px;
+  }
+
+@media (max-width: 768px) {
+   
+    body {
+        font-size: 18px; /* Increase the base font size for small devices */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Make headings larger on small screens */
+    }
+
+    select, button, #dynamic-lesson-inputs textarea, #required-items-list {
+        font-size: 18px; /* Increase font size for form elements and lists */
+    }
+
+    .flex-container {
+        flex-direction: column-reverse;
+    }
+
+    .flex-container #timetable {
+        margin-left: 0;
+    }
+
+    /* Adjust main section margin and padding on smaller screens */
+    main {
+        margin: 20px;
+        padding: 15px;
+        overflow: hidden;
+    }
+
+    #class, #day {
+        margin: 5px; /* Adds some space between your select elements */
+    }
+
+    #twobuttons {
+        display: flex;
+        justify-content: center; /* This centers the button horizontally */
+        padding: 10px 0; /* Add some vertical padding if needed */
+    }
+
+    /* It's also a good practice to ensure the button itself has appropriate margins cleared if any have been set elsewhere */
+    #save-items-button {
+        margin: 0 auto; /* This further ensures the button is centered horizontally */
+        /* Adjust button's padding or other properties as needed */
+    }   
+}
+
